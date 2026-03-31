@@ -15,25 +15,40 @@ class Node {
 
 class Solution {
     public Node copyRandomList(Node head) {
-        Map<Node, Node> helperMap = new HashMap<>();
-        
+        if (head == null) return null;
+
         Node curr = head;
-        // create deep copy nodes mapping
         while (curr != null) {
-            helperMap.put(curr, new Node(curr.val));
-            curr = curr.next;
+            Node currCopy = new Node(curr.val);
+            currCopy.next = curr.next;
+            curr.next = currCopy;
+            
+            curr = currCopy.next;
         }
 
-        // link nodes in the deep copy
         curr = head;
         while(curr != null) {
-            Node deepCopyNode = helperMap.get(curr);
-
-            deepCopyNode.next = helperMap.get(curr.next);
-            deepCopyNode.random = helperMap.get(curr.random);
-            curr = curr.next;
+            if (curr.random != null) {
+                curr.next.random = curr.random.next;
+            }
+            if (curr.next != null) {
+                curr = curr.next.next;
+            }
         }
 
-        return helperMap.get(head);
+        Node oldHead = head;
+        Node newHead = head.next;
+        Node currOld = oldHead;
+        Node currNew = newHead;
+
+        while (currOld != null) {
+            currOld.next = currOld.next.next;
+            currNew.next = currNew.next != null ? currNew.next.next : null;
+            currOld = currOld.next;
+            currNew = currNew.next;
+        }
+
+        return newHead;
+
     }
 }
