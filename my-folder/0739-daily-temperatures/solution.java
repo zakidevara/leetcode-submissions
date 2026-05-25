@@ -1,16 +1,17 @@
 class Solution {
     public int[] dailyTemperatures(int[] temperatures) {
-        Stack<Integer> stack = new Stack<>(); // stack of indices
-        int[] answer = new int[temperatures.length];
+        Stack<Integer> stack = new Stack<>(); // monotonic stack descending order (bottom -> top)
+        int[] result = new int[temperatures.length];
         for (int i = 0; i < temperatures.length; i++) {
-            // monotonic decreasing (bottom to top)
-            while (!stack.empty() && temperatures[i] > temperatures[stack.peek()]) {
-                int popValue = stack.pop();
-                answer[popValue] = i - popValue;
+            while (!stack.isEmpty() && temperatures[stack.peek()] < temperatures[i]) {
+                int curr = stack.pop();
+                result[curr] = i-curr;
             }
+
             stack.push(i);
         }
 
-        return answer;
+
+        return result;
     }
 }
