@@ -1,70 +1,59 @@
 class Trie {
-
+    
     private Node root;
 
     public Trie() {
-        root = new Node(null);
+        root = new Node(' ');
     }
-
+    
     public void insert(String word) {
-        char[] chars = word.toCharArray();
         Node curr = root;
-        for (char c : chars) {
-            if (!curr.childrens.containsKey(c)) {
-                curr.childrens.put(c, new Node(c));
-            }
+        for (Character c : word.toCharArray()) {
+            curr.childrens.computeIfAbsent(c, k -> new Node(c));
             curr = curr.childrens.get(c);
         }
-
-        curr.isWord = true;
-
-    }
-
-    public boolean search(String word) {
-        char[] chars = word.toCharArray();
         
+        curr.isWord = true;
+        
+    }
+    
+    public boolean search(String word) {
         Node curr = root;
-        for (char c : chars) {
+        for (Character c : word.toCharArray()) {
             if (!curr.childrens.containsKey(c)) {
                 return false;
             }
             curr = curr.childrens.get(c);
         }
-
+        
         return curr.isWord;
     }
-
+    
     public boolean startsWith(String prefix) {
-        char[] chars = prefix.toCharArray();
-        
         Node curr = root;
-        for (char c : chars) {
+        for (Character c : prefix.toCharArray()) {
             if (!curr.childrens.containsKey(c)) {
                 return false;
             }
             curr = curr.childrens.get(c);
         }
-
+        
         return true;
-
+        
     }
-
+    
     private class Node {
         Character val;
-
-        Map<Character, Node> childrens = new HashMap<>();
-        boolean isWord = false;
-
+        Map<Character, Node> childrens;
+        boolean isWord;
+        
         public Node(Character val) {
             this.val = val;
-        }
-
-        public boolean equals(Node o) {
-            return o.val == this.val;
+            this.childrens = new HashMap<>();
+            this.isWord = false;
         }
     }
 }
-
 
 /**
  * Your Trie object will be instantiated and called as such:
