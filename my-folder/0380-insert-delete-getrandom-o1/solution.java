@@ -1,25 +1,32 @@
 class RandomizedSet {
     private Set<Integer> set;
-
     public RandomizedSet() {
         set = new HashSet<>();
     }
     
     public boolean insert(int val) {
         if (set.contains(val)) return false;
+
         set.add(val);
         return true;
     }
     
     public boolean remove(int val) {
         if (!set.contains(val)) return false;
+
         set.remove(val);
         return true;
+        
     }
     
     public int getRandom() {
-        int idx = new Random().nextInt(set.size());
-        return set.toArray(new Integer[set.size()])[idx];
+        int randomIdx = new Random().nextInt(set.size());
+
+        for (int i : set) {
+            if (randomIdx == 0) return i;
+            randomIdx--;
+        }
+        return -1;
     }
 }
 
